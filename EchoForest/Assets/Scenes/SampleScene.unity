@@ -756,7 +756,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &948688423
 RectTransform:
   m_ObjectHideFlags: 0
@@ -855,6 +855,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   label: {fileID: 1501720426}
   localOffset: {x: 0, y: 1.8, z: 0}
+--- !u!4 &1107357891 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2719569588957798408, guid: 64dce48905ffd9b4293e595fa6941544, type: 3}
+  m_PrefabInstance: {fileID: 1446069590}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1228046745
 GameObject:
   m_ObjectHideFlags: 0
@@ -1707,6 +1712,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4416926081852918481, guid: 64dce48905ffd9b4293e595fa6941544, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1446069601}
+    - targetCorrespondingSourceObject: {fileID: 4416926081852918481, guid: 64dce48905ffd9b4293e595fa6941544, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1446069603}
+    - targetCorrespondingSourceObject: {fileID: 4416926081852918481, guid: 64dce48905ffd9b4293e595fa6941544, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1446069602}
   m_SourcePrefab: {fileID: 100100000, guid: 64dce48905ffd9b4293e595fa6941544, type: 3}
 --- !u!4 &1446069591 stripped
 Transform:
@@ -1750,6 +1761,49 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxSlots: 6
   slots: []
+--- !u!114 &1446069602
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1446069592}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e2a2d64f560daa45b15c453f2017c18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  max: 5
+  current: 0
+  onDamaged:
+    m_PersistentCalls:
+      m_Calls: []
+  onDied:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &1446069603
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1446069592}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5d13a417993c5d41b4bf5546b90c3c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  meleeKey: 102
+  meleeRange: 1.6
+  meleeRadius: 0.9
+  meleeCooldown: 0.35
+  enemyMask:
+    serializedVersion: 2
+    m_Bits: 128
+  firePoint: {fileID: 1107357891}
+  projectilePrefab: {fileID: 8102438136083206677, guid: e520a6106b452bb48adf857dc29413d9, type: 3}
+  projectileSpeed: 18
+  shootCooldown: 1
 --- !u!1 &1467813611
 GameObject:
   m_ObjectHideFlags: 0
