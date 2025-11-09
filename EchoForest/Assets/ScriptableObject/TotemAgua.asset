@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d30e45a4a364c1147bd58b273885227f, type: 3}
-  m_Name: TotemDefinition
+  m_Name: TotemAgua
   m_EditorClassIdentifier: 
   itemId: totem_agua
   displayName: "T\xF3tem de agua"
   kind: 0
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: d58ef9d87a5d578469f32dd5848c1312, type: 3}
   worldPrefab: {fileID: 0}
   stackable: 0
   maxStack: 1

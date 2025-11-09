@@ -21,7 +21,7 @@ public class FloatingPrompt : MonoBehaviour
         transform.SetParent(target, false);
         transform.localPosition = localOffset;
         transform.localRotation = Quaternion.identity;
-        transform.localScale = Vector3.one * 0.01f;
+        //transform.localScale = Vector3.one * 0.01f;
     }
 
     public void Show(string text) { if (label) label.text = text; gameObject.SetActive(true); }
