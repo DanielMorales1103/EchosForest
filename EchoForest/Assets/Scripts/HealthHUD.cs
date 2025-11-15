@@ -12,7 +12,7 @@ public class HealthHUD : MonoBehaviour
         if (!playerHealth) playerHealth = FindAnyObjectByType<PlayerHealth>();
         slider.minValue = 0;
         slider.maxValue = playerHealth.max;
-        slider.value = playerHealth.current;
+
         playerHealth.onDamaged.AddListener(Refresh);
         playerHealth.onDied.AddListener(Refresh);
         Refresh();
@@ -20,6 +20,6 @@ public class HealthHUD : MonoBehaviour
 
     void Refresh()
     {
-        slider.value = playerHealth.current;
+        slider.value = playerHealth.max - playerHealth.current;
     }
 }
