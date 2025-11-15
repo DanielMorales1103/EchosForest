@@ -2,57 +2,50 @@ using UnityEngine;
 
 public class EnemyFollow : MonoBehaviour
 {
-    [SerializeField] Transform target;
-    [SerializeField] float speed = 1f;
-    [SerializeField] float turnSpeed = 10f;
-    [SerializeField] float stopDistance = 0.0f;
+    public Transform target;
+    public float speed = 1f;
+    public float turnSpeed = 10f;
+    public float stopDistance = 1.0f;
+    public float targetHeight = 1.0f;
 
-    [SerializeField] float heightOffset = 1.0f;
-    [SerializeField] float verticalSpeed = 1f;
-    [SerializeField] bool useControllerHeight = true;
-    [SerializeField] float heightRatio = 0.6f;
-
-    Transform tgt;
-    float targetY;
+    Rigidbody rb;
 
     void Awake()
     {
-        if (!target)
-        {
-            var inv = FindAnyObjectByType<Inventory>();
-            if (inv) tgt = inv.transform;
-        }
-        else tgt = target;
-
-        if (TryGetComponent<Rigidbody>(out var rb)) rb.useGravity = false;
+        rb = GetComponent<Rigidbody>();
     }
 
-    void Update()
+    void Start()
     {
-        if (!tgt) return;
-
-        var pos = transform.position;
-        var tpos = tgt.position;
-
-        if (useControllerHeight && tgt.TryGetComponent<CharacterController>(out var cc))
-            targetY = tpos.y + cc.height * heightRatio;
-        else
-            targetY = tpos.y + heightOffset;
-
-        var flatDir = new Vector3(tpos.x - pos.x, 0f, tpos.z - pos.z);
-        var dist = flatDir.magnitude;
-        if (dist > stopDistance)
+        // Si no se asignó target desde el spawner, lo buscamos por tag
+        if (target == null)
         {
-            var moveDir = flatDir.normalized;
-            var desiredRot = Quaternion.LookRotation(moveDir, Vector3.up);
-            transform.rotation = Quaternion.Slerp(transform.rotation, desiredRot, turnSpeed * Time.deltaTime);
-            transform.position += moveDir * speed * Time.deltaTime;
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
+            if (player != null)
+            {
+                target = player.transform;
+            }
         }
-
-        var p = transform.position;
-        p.y = Mathf.MoveTowards(p.y, targetY, verticalSpeed * Time.deltaTime);
-        transform.position = p;
     }
 
-    public void SetTarget(Transform t) => tgt = t;
+    void FixedUpdate()
+    {
+        if (!target || !rb) return;
+
+        Vector3 targetPos = target.position;
+        targetPos.y += targetHeight;   
+
+        Vector3 toTarget = targetPos - transform.position;
+        float dist = toTarget.magnitude;
+        if (dist <= stopDistance) return;
+
+        Vector3 dir = toTarget.normalized;
+
+        Quaternion targetRot = Quaternion.LookRotation(dir);
+        transform.rotation = Quaternion.Lerp(transform.rotation, targetRot, turnSpeed * Time.fixedDeltaTime);
+
+        Vector3 newPos = transform.position + dir * speed * Time.fixedDeltaTime;
+        rb.MovePosition(newPos);
+    }
+
 }
