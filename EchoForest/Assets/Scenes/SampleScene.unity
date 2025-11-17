@@ -1397,7 +1397,7 @@ GameObject:
   - component: {fileID: 1340981123}
   m_Layer: 3
   m_Name: Capsule
-  m_TagString: Untagged
+  m_TagString: Totem
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1524,7 +1524,7 @@ GameObject:
   - component: {fileID: 1351292426}
   m_Layer: 3
   m_Name: Altar_agua
-  m_TagString: Untagged
+  m_TagString: Altar
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2208,8 +2208,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   meleeKey: 102
-  meleeRange: 1.6
-  meleeRadius: 0.9
+  meleeRange: 2.5
+  meleeRadius: 1.2
   meleeCooldown: 0.35
   enemyMask:
     serializedVersion: 2
@@ -2217,7 +2217,7 @@ MonoBehaviour:
   firePoint: {fileID: 1107357891}
   projectilePrefab: {fileID: 8102438136083206677, guid: e520a6106b452bb48adf857dc29413d9, type: 3}
   projectileSpeed: 18
-  shootCooldown: 1
+  shootCooldown: 4
 --- !u!1 &1467813611
 GameObject:
   m_ObjectHideFlags: 0

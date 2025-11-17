@@ -1,4 +1,6 @@
 using UnityEngine;
+using StarterAssets;
+using System.Collections;
 
 public class Interactor : MonoBehaviour
 {
@@ -7,21 +9,76 @@ public class Interactor : MonoBehaviour
     [SerializeField] private Transform rayOrigin;
     [SerializeField] private float startOffset = 0.4f;
 
+    public float interactLockTime = 3.5f;
+
     private IInteractable current;
     private FloatingPrompt currentPrompt;
     private FloatingPrompt lastPrompt;
 
+    private Animator animator;
+    private ThirdPersonController controller;
+    private StarterAssetsInputs inputs;
+
     void Awake()
     {
         if (!rayOrigin && Camera.main) rayOrigin = Camera.main.transform;
+        animator = GetComponentInChildren<Animator>();
+
+        controller = GetComponent<ThirdPersonController>();
+        if (!controller) controller = GetComponentInParent<ThirdPersonController>();
+
+        inputs = GetComponent<StarterAssetsInputs>();
+        if (!inputs) inputs = GetComponentInParent<StarterAssetsInputs>();
     }
 
     void Update()
     {
         UpdateCurrent();
         if (current != null && Input.GetKeyDown(KeyCode.E))
-            current.Interact(gameObject);
+        {
+            PlayInteractAnimation();
+            current.Interact(gameObject);                     
+        }
     }
+
+    void PlayInteractAnimation()
+    {
+        if (!animator) return;
+
+        var mb = current as MonoBehaviour;
+        if (!mb) return;
+
+        StartCoroutine(LockMovement(interactLockTime));
+
+        if (mb.CompareTag("Totem"))
+        {
+            Debug.Log("Playing get animation");
+            animator.SetTrigger("get");
+        }
+        else if (mb.CompareTag("Altar"))
+        {
+            animator.SetTrigger("Use");
+        }
+    }
+
+    IEnumerator LockMovement(float duration)
+    {
+        if (controller != null)
+            controller.enabled = false;   
+
+        if (inputs != null)
+        {
+            inputs.move = Vector2.zero;
+            inputs.jump = false;
+            inputs.sprint = false;
+        }
+
+        yield return new WaitForSeconds(duration);
+
+        if (controller != null)
+            controller.enabled = true;    
+    }
+
 
     void UpdateCurrent()
     {
@@ -31,11 +88,10 @@ public class Interactor : MonoBehaviour
         Vector3 origin = rayOrigin.position + rayOrigin.forward * startOffset;
         var ray = new Ray(origin, rayOrigin.forward);
 
-        Debug.DrawRay(origin, rayOrigin.forward * range, Color.cyan);  // Para ver el rayo
+        Debug.DrawRay(origin, rayOrigin.forward * range, Color.cyan);  
 
         if (Physics.Raycast(ray, out var hit, range, interactMask, QueryTriggerInteraction.Collide))
         {
-            Debug.Log("Hit detected: " + hit.collider.name);  // Agregado para saber si el rayo está detectando el objeto
 
             current = hit.collider.GetComponentInParent<IInteractable>();
             if (current != null)
@@ -47,10 +103,6 @@ public class Interactor : MonoBehaviour
                     currentPrompt.Attach(root);
                 }
             }
-        }
-        else
-        {
-            Debug.Log("No hit detected.");
         }
 
         if (lastPrompt && lastPrompt != currentPrompt)

@@ -1,4 +1,6 @@
 using UnityEngine;
+using System.Collections;
+using StarterAssets;
 
 public class PlayerCombat : MonoBehaviour
 {
@@ -11,24 +13,74 @@ public class PlayerCombat : MonoBehaviour
     public Transform firePoint;
     public GameObject projectilePrefab;
     public float projectileSpeed = 18f;
-    public float shootCooldown = 0.25f;
+    public float shootCooldown = 5.0f;
+
+    public float meleeLockTime = 1f;
+    public float shootLockTime = 4f;
 
     float nextMeleeTime;
     float nextShootTime;
+
+    private Animator animator;
+    private ThirdPersonController controller;
+    private StarterAssetsInputs inputs;
+
+    void Awake()
+    {
+        animator = GetComponentInChildren<Animator>();
+
+        controller = GetComponent<ThirdPersonController>();
+        if (!controller) controller = GetComponentInParent<ThirdPersonController>();
+
+        inputs = GetComponent<StarterAssetsInputs>();
+        if (!inputs) inputs = GetComponentInParent<StarterAssetsInputs>();
+    }
 
     void Update()
     {
         if (Input.GetKeyDown(meleeKey) && Time.time >= nextMeleeTime)
         {
-            DoMelee();
+            
             nextMeleeTime = Time.time + meleeCooldown;
+            if (animator) animator.SetTrigger("Punch");
+            StartCoroutine(LockMovement(meleeLockTime));
+            DoMelee();
+            //animator.SetTrigger("Punch");
         }
 
         if (Input.GetMouseButtonDown(0) && Time.time >= nextShootTime)
         {
-            DoShoot();
             nextShootTime = Time.time + shootCooldown;
+            if (animator) animator.SetTrigger("Shoot");
+            StartCoroutine(LockMovement(shootLockTime));
+            StartCoroutine(ShootDelayed());
         }
+    }
+
+    IEnumerator ShootDelayed()
+    {
+        yield return new WaitForSeconds(1f);
+        DoShoot();                              
+    }
+
+    IEnumerator LockMovement(float duration)
+    {
+        // Desactivamos movimiento
+        if (controller != null)
+            controller.enabled = false;
+
+        if (inputs != null)
+        {
+            inputs.move = Vector2.zero;
+            inputs.jump = false;
+            inputs.sprint = false;
+        }
+
+        yield return new WaitForSeconds(duration);
+
+        // Volvemos a activarlo
+        if (controller != null)
+            controller.enabled = true;
     }
 
     void DoMelee()
