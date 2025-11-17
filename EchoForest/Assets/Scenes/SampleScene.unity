@@ -1546,6 +1546,8 @@ MonoBehaviour:
   radius: 2
   dropHeight: 2
   yOffset: 2.5
+  spawnDelay: 7
+  perEnemyDelay: 2
 --- !u!114 &1351292427
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2161,6 +2163,7 @@ MonoBehaviour:
     m_Bits: 8
   rayOrigin: {fileID: 867997897}
   startOffset: 4
+  interactLockTime: 3.5
 --- !u!114 &1446069601
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2218,6 +2221,8 @@ MonoBehaviour:
   projectilePrefab: {fileID: 8102438136083206677, guid: e520a6106b452bb48adf857dc29413d9, type: 3}
   projectileSpeed: 18
   shootCooldown: 4
+  meleeLockTime: 1
+  shootLockTime: 4
 --- !u!1 &1467813611
 GameObject:
   m_ObjectHideFlags: 0

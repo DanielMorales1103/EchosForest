@@ -65,7 +65,6 @@ public class PlayerCombat : MonoBehaviour
 
     IEnumerator LockMovement(float duration)
     {
-        // Desactivamos movimiento
         if (controller != null)
             controller.enabled = false;
 
@@ -78,7 +77,6 @@ public class PlayerCombat : MonoBehaviour
 
         yield return new WaitForSeconds(duration);
 
-        // Volvemos a activarlo
         if (controller != null)
             controller.enabled = true;
     }
