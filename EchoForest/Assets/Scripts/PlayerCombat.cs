@@ -41,6 +41,8 @@ public class PlayerCombat : MonoBehaviour
 
     void Update()
     {
+        if (PauseManager.IsGamePaused) return;
+
         if (Input.GetKeyDown(meleeKey) && Time.time >= nextMeleeTime)
         {
             
