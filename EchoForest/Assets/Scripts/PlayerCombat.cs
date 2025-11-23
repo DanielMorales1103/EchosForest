@@ -25,6 +25,7 @@ public class PlayerCombat : MonoBehaviour
     private ThirdPersonController controller;
     private StarterAssetsInputs inputs;
 
+    private Camera mainCam;
     void Awake()
     {
         animator = GetComponentInChildren<Animator>();
@@ -34,6 +35,8 @@ public class PlayerCombat : MonoBehaviour
 
         inputs = GetComponent<StarterAssetsInputs>();
         if (!inputs) inputs = GetComponentInParent<StarterAssetsInputs>();
+
+        mainCam = Camera.main;
     }
 
     void Update()
@@ -96,11 +99,46 @@ public class PlayerCombat : MonoBehaviour
     void DoShoot()
     {
         if (!projectilePrefab) return;
-        Vector3 origin = firePoint ? firePoint.position : transform.position + Vector3.up * 1.5f;
-        Vector3 dir = transform.forward.normalized;
-        var go = Instantiate(projectilePrefab, origin, Quaternion.LookRotation(dir));
+
+        Vector3 origin = firePoint
+            ? firePoint.position
+            : transform.position + Vector3.up * 1.5f;
+
+        if (mainCam == null)
+        {
+            Vector3 fallbackDir = transform.forward.normalized;
+            var goFallback = Instantiate(projectilePrefab, origin, Quaternion.LookRotation(fallbackDir));
+            var projFallback = goFallback.GetComponent<Projectile>();
+            if (projFallback) projFallback.Launch(fallbackDir, projectileSpeed);
+            return;
+        }
+
+        Vector3 camPos = mainCam.transform.position;
+        Vector3 camForward = mainCam.transform.forward;
+
+        Ray ray = new Ray(camPos, camForward);
+        Vector3 targetPoint;
+
+        if (Physics.Raycast(ray, out RaycastHit hit, 1000f, ~0, QueryTriggerInteraction.Ignore))
+        {
+            targetPoint = hit.point;
+        }
+        else
+        {
+            targetPoint = camPos + camForward * 1000f;
+        }
+
+        Vector3 dirFromCamera = (targetPoint - origin).normalized;
+
+        float dot = Vector3.Dot(transform.forward, dirFromCamera);
+
+        float t = Mathf.Clamp01(dot);  
+
+        Vector3 finalDir = Vector3.Slerp(transform.forward, dirFromCamera, t).normalized;
+
+        var go = Instantiate(projectilePrefab, origin, Quaternion.LookRotation(finalDir));
         var proj = go.GetComponent<Projectile>();
-        if (proj) proj.Launch(dir, projectileSpeed);
+        if (proj) proj.Launch(finalDir, projectileSpeed);
     }
 
     void OnDrawGizmosSelected()
