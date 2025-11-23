@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 public class PlayerHealth : MonoBehaviour
 {
@@ -19,6 +20,16 @@ public class PlayerHealth : MonoBehaviour
         current = Mathf.Max(0, current - amount);
         onDamaged?.Invoke();
         if (current == 0) onDied?.Invoke();
+        if (current <= 0)
+        {
+            current = 0;
+            Die();
+        }
+    }
+
+    public void Die()
+    {
+        SceneManager.LoadScene("Defeat");
     }
 
     public void Heal(int amount)
