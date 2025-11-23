@@ -20,6 +20,9 @@ public class Altar : MonoBehaviour, IInteractable
         {
             completed = true;
             onPlaced?.Invoke();
+            if (GameManagerVictory.Instance != null)
+                GameManagerVictory.Instance.RegisterAltarCompleted();
+
         }
     }
 }

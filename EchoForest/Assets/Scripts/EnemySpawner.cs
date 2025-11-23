@@ -30,6 +30,9 @@ public class EnemySpawner : MonoBehaviour
                 pos = hit.point + Vector3.up * yOffset;
             Instantiate(enemyPrefab, pos, Quaternion.identity);
 
+            if (GameManagerVictory.Instance != null)
+                GameManagerVictory.Instance.RegisterEnemySpawn(1);
+
             if (i < count - 1)
                 yield return new WaitForSeconds(perEnemyDelay);
         }

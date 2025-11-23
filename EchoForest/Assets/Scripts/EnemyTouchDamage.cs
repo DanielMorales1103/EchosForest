@@ -8,11 +8,14 @@ public class EnemyTouchDamage : MonoBehaviour
     Transform target;
     PlayerHealth targetHealth;
     float nextTime;
+    EnemyKillable killable;
 
     void Start()
     {
         var ph = FindAnyObjectByType<PlayerHealth>();
         if (ph) { targetHealth = ph; target = ph.transform; }
+
+        killable = GetComponent<EnemyKillable>();
     }
 
     void Update()
@@ -24,6 +27,10 @@ public class EnemyTouchDamage : MonoBehaviour
         {
             targetHealth.Damage(damage);
             nextTime = Time.time + cooldown;
+            if (killable != null)
+                killable.Kill();
+            else
+                Destroy(gameObject);
         }
     }
 }
