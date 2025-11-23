@@ -6,6 +6,7 @@ public class GameplayCursorController : MonoBehaviour
 
     void Update()
     {
+        if (PauseManager.IsGamePaused) return;
         if (Input.GetMouseButtonDown(0) && !cursorLocked)
         {
             LockCursor();
