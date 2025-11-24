@@ -15,7 +15,7 @@ public class MainMenu : MonoBehaviour
 
     public void GoingControls()
     {
-        SceneManager.LoadScene(instructionsSceneName);
+        SceneManager.LoadScene(ControlsSceneName);
     }
 
     public void GoingInstructions()
