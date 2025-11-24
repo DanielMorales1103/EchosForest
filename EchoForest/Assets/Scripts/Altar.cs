@@ -6,6 +6,7 @@ public class Altar : MonoBehaviour, IInteractable
     [SerializeField] TotemDefinition requiredTotem;
     [SerializeField] UnityEvent onPlaced;
     bool completed;
+    public GameSFX sfx;
 
     public string PromptText => "[E] Interact";
 
@@ -20,6 +21,7 @@ public class Altar : MonoBehaviour, IInteractable
         {
             completed = true;
             onPlaced?.Invoke();
+            if (sfx != null) sfx.PlayPlaceTotem();
             if (GameManagerVictory.Instance != null)
                 GameManagerVictory.Instance.RegisterAltarCompleted();
 

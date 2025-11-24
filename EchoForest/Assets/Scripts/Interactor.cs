@@ -19,6 +19,8 @@ public class Interactor : MonoBehaviour
     private ThirdPersonController controller;
     private StarterAssetsInputs inputs;
 
+    public GameSFX sfx;
+
     void Awake()
     {
         if (!rayOrigin && Camera.main) rayOrigin = Camera.main.transform;
@@ -52,7 +54,7 @@ public class Interactor : MonoBehaviour
 
         if (mb.CompareTag("Totem"))
         {
-            Debug.Log("Playing get animation");
+            if(sfx != null) sfx.PlayPickupTotem();
             animator.SetTrigger("get");
         }
         else if (mb.CompareTag("Altar"))

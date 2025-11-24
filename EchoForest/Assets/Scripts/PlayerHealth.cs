@@ -8,6 +8,7 @@ public class PlayerHealth : MonoBehaviour
     public int current;
     public UnityEvent onDamaged;
     public UnityEvent onDied;
+    public GameSFX sfx;
 
     void Awake()
     {
@@ -17,6 +18,7 @@ public class PlayerHealth : MonoBehaviour
     public void Damage(int amount)
     {
         if (current <= 0) return;
+        if(sfx != null) sfx.PlayEnemyDeath();
         current = Mathf.Max(0, current - amount);
         onDamaged?.Invoke();
         if (current == 0) onDied?.Invoke();

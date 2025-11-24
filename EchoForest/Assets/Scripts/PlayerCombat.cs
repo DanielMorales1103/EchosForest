@@ -26,6 +26,8 @@ public class PlayerCombat : MonoBehaviour
     private StarterAssetsInputs inputs;
 
     private Camera mainCam;
+
+    public GameSFX sfx;
     void Awake()
     {
         animator = GetComponentInChildren<Animator>();
@@ -88,12 +90,17 @@ public class PlayerCombat : MonoBehaviour
 
     void DoMelee()
     {
+        if(sfx != null) sfx.PlayMelee();
         Vector3 center = transform.position + transform.forward * meleeRange;
         var hits = Physics.OverlapSphere(center, meleeRadius, enemyMask, QueryTriggerInteraction.Collide);
         for (int i = 0; i < hits.Length; i++)
         {
             var h = hits[i].GetComponentInParent<EnemyKillable>();
-            if (h) h.Kill();
+            if (h)
+            {
+                h.Kill();
+                if(sfx != null) sfx.PlayEnemyDeath();
+            }
             else Destroy(hits[i].attachedRigidbody ? hits[i].attachedRigidbody.gameObject : hits[i].gameObject);
         }
     }
@@ -105,6 +112,8 @@ public class PlayerCombat : MonoBehaviour
         Vector3 origin = firePoint
             ? firePoint.position
             : transform.position + Vector3.up * 1.5f;
+
+        if(sfx != null) sfx.PlayShoot();
 
         if (mainCam == null)
         {
